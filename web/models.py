@@ -9,9 +9,9 @@ class Book(models.Model):
     author = models.CharField(max_length=150)
     story_name = models.CharField(max_length=50)
     description = models.TextField()
-    image = models.ImageField(default='', upload_to='story_image/', null=True)
+    image = models.ImageField(default='', upload_to='web/story_image/', blank = True, null = True)
     favorite = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=now)
 
     def __str__(self):
-        return self.author
+        return self.story_name
