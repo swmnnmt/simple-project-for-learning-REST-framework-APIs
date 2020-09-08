@@ -6,12 +6,12 @@ from django.utils.timezone import now
 
 
 class Book(models.Model):
-    name = models.CharField(max_length=150)
+    author = models.CharField(max_length=150)
     story_name = models.CharField(max_length=50)
     description = models.TextField()
     image = models.ImageField(default='', upload_to='story_image/', null=True)
-    fav = models.BooleanField(default=False)
+    favorite = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=now)
 
     def __str__(self):
-        return self.name
+        return self.author
