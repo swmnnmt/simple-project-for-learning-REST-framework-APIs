@@ -10,3 +10,10 @@ class GetAllData(APIView):
         query = Book.objects.all()
         serializers = BookModelSerializer(query, many=True)
         return Response(serializers.data, status = status.HTTP_200_OK)
+
+
+class GetFavData(APIView):
+    def get(self, request):
+        query = Book.objects.filter(favorite = True)
+        serializers = BookModelSerializer(query, many = True)
+        return Response(serializers.data, status = status.HTTP_200_OK)
