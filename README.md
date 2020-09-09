@@ -1,1 +1,2 @@
-# Short-Story-Project-for-learnig-REST-framework-APIs
+# Novel Series project
+simple project for learning REST framework APIs
