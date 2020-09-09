@@ -34,3 +34,35 @@ class UpdateStoryData(APIView):
             return Response(serializers.data, status=status.HTTP_201_CREATED)
 
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PostModelData(APIView):
+    # Model Serializer
+
+    def post(self, request):
+        serializers = BookModelSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+"""class PostData(APIView):
+    #Custom Serializer
+    def post(self, request):
+        serializers = BookSerializer(data=request.data)
+        if serializers.is_valid():
+            author = serializers.data.get('author')
+            story_name = serializers.data.get('story_name')
+            description = serializers.data.get('description')
+            image = request.FILES['image']
+            favorite = serializers.data.get('favorite')
+            book = Book()
+            book.author= author
+            book.story_name=story_name
+            book.description=description
+            book.image=image
+            book.favorite=favorite
+            book.save()
+            return Response (serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)"""
