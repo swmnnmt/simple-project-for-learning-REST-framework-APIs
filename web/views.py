@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from web.models import Book
-from web.serializers import BookModelSerializer, BookSerializer
+from web.serializers import BookModelSerializer
+from web.serializers import BookSerializer
 
 
 class GetAllData(APIView):
@@ -48,7 +49,7 @@ class PostModelData(APIView):
 
 
 class PostData(APIView):
-    #Custom Serializer
+    # Custom Serializer
     def post(self, request):
         serializers = BookSerializer(data=request.data)
         if serializers.is_valid():
@@ -58,18 +59,11 @@ class PostData(APIView):
             image = request.FILES['image']
             favorite = serializers.data.get('favorite')
             book = Book()
-            book.author= author
-            book.story_name=story_name
-            book.description=description
-            book.image=image
-            book.favorite=favorite
+            book.author = author
+            book.story_name = story_name
+            book.description = description
+            book.image = image
+            book.favorite = favorite
             book.save()
-            return Response (serializers.data, status=status.HTTP_201_CREATED)
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class SearchData(APIView):
-    def get(self, request):
-        query = Book.objects.filter(story_name__contains=request.GET['name'])
-        serializers = BookModelSerializer(query, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
