@@ -21,22 +21,6 @@ class GetFavData(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
-class UpdateStoryData(APIView):
-    def get(self, request, pk):
-        query = Book.objects.get(pk=pk)
-        serializers = BookModelSerializer(query)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-    def put(self, request, pk):
-        query = Book.objects.get(pk=pk)
-        serializers = BookModelSerializer(query, data=request.data)
-        if serializers.is_valid():
-            serializers.save()
-            return Response(serializers.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class PostModelData(APIView):
     # Model Serializer
 
@@ -74,3 +58,34 @@ class SearchData(APIView):
         query = Book.objects.filter(story_name__contains=request.GET['name'])
         serializers = BookModelSerializer(query, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
+
+
+class EditData(APIView):
+    def get(self, request):
+        try:
+            query = Book.objects.get(pk=request.GET['id'])
+            serializers = BookModelSerializer(query)
+            return Response(serializers.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request):
+        try:
+            query = Book.objects.get(pk=request.GET['id'])
+            serializers = BookModelSerializer(query, data=request.data)
+            if serializers.is_valid():
+                serializers.save()
+                return Response(serializers.data, status=status.HTTP_201_CREATED)
+
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request):
+        try:
+            query = Book.objects.get(pk=request.GET['id'])
+            serializers = BookModelSerializer(query)
+            query.delete()
+            return Response(serializers.data, status=status.HTTP_204_NO_CONTENT)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
