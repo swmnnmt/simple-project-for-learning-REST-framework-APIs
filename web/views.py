@@ -13,7 +13,7 @@ from web.serializers import BookSerializer
 class GetAllData(APIView):
     def get(self, request):
         query = Book.objects.all()
-        serializers = BookModelSerializer(query, many=True)
+        serializers = BookModelSerializer(query, many=True, context={'request': request})
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
@@ -23,15 +23,16 @@ class GetAllData(APIView):
 def get_all_data(request):
     if request.method == 'GET':
         query = Book.objects.all()
-        serializers = BookModelSerializer(query, many=True)
+        serializers = BookModelSerializer(query, many=True, context={'request': request})
         return Response(serializers.data, status=status.HTTP_200_OK)
+
 
 # Class Based Get Favorite Date
 # Model Based Serializer
 class GetFavData(APIView):
     def get(self, request):
         query = Book.objects.filter(favorite=True)
-        serializers = BookModelSerializer(query, many=True)
+        serializers = BookModelSerializer(query, many=True, context={'request': request})
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
@@ -45,6 +46,7 @@ class PostModelData(APIView):
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # Function Based API for Post Data
 # Model Based Serializer
 @api_view(['POST'])
@@ -55,6 +57,7 @@ def post_model_data(request):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # Class Based API for Post Data
 # Custom Serializer
@@ -81,7 +84,7 @@ class PostData(APIView):
 class SearchData(APIView):
     def get(self, request):
         query = Book.objects.filter(story_name__contains=request.GET['name'])
-        serializers = BookModelSerializer(query, many=True)
+        serializers = BookModelSerializer(query, many=True, context={'request': request})
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
@@ -89,7 +92,7 @@ class EditData(APIView):
     def get(self, request):
         try:
             query = Book.objects.get(pk=request.GET['id'])
-            serializers = BookModelSerializer(query)
+            serializers = BookModelSerializer(query, context={'request': request})
             return Response(serializers.data, status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
