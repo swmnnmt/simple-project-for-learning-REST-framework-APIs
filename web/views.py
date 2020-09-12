@@ -117,3 +117,5 @@ class EditData(APIView):
             return Response(serializers.data, status=status.HTTP_204_NO_CONTENT)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+
