@@ -1,5 +1,6 @@
+from rest_framework import permissions
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -11,6 +12,7 @@ from web.serializers import BookSerializer
 # Class Based API for GET ALL DATA
 # Model Based  Serializer
 class GetAllData(APIView):
+    permission_classes([permissions.IsAuthenticatedOrReadOnly])
     def get(self, request):
         query = Book.objects.all()
         serializers = BookModelSerializer(query, many=True, context={'request': request})
@@ -20,6 +22,7 @@ class GetAllData(APIView):
 # Function Based Get All Data
 # Model Based Serializer
 @api_view(['GET'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def get_all_data(request):
     if request.method == 'GET':
         query = Book.objects.all()
@@ -30,6 +33,7 @@ def get_all_data(request):
 # Class Based Get Favorite Date
 # Model Based Serializer
 class GetFavData(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request):
         query = Book.objects.filter(favorite=True)
         serializers = BookModelSerializer(query, many=True, context={'request': request})
@@ -39,6 +43,8 @@ class GetFavData(APIView):
 # Class Based API for Post Data
 # Model Based Serializer
 class PostModelData(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
     def post(self, request):
         serializers = BookModelSerializer(data=request.data)
         if serializers.is_valid():
@@ -50,6 +56,7 @@ class PostModelData(APIView):
 # Function Based API for Post Data
 # Model Based Serializer
 @api_view(['POST'])
+@permission_classes([permissions.IsAdminUser])
 def post_model_data(request):
     if request.method == 'POST':
         serializers = BookModelSerializer(data=request.data)
@@ -62,6 +69,7 @@ def post_model_data(request):
 # Class Based API for Post Data
 # Custom Serializer
 class PostData(APIView):
+    permission_classes = [permissions.IsAdminUser]
     def post(self, request):
         serializers = BookSerializer(data=request.data)
         if serializers.is_valid():
@@ -82,6 +90,7 @@ class PostData(APIView):
 
 
 class SearchData(APIView):
+    permission_classes([permissions.AllowAny])
     def get(self, request):
         query = Book.objects.filter(story_name__contains=request.GET['name'])
         serializers = BookModelSerializer(query, many=True, context={'request': request})
@@ -89,6 +98,7 @@ class SearchData(APIView):
 
 
 class EditData(APIView):
+    permission_classes([permissions.IsAdminUser])
     def get(self, request):
         try:
             query = Book.objects.get(pk=request.GET['id'])
@@ -117,5 +127,3 @@ class EditData(APIView):
             return Response(serializers.data, status=status.HTTP_204_NO_CONTENT)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
-
