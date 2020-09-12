@@ -1,26 +1,33 @@
 from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+
 from web.models import Book
 from web.serializers import BookModelSerializer
 from web.serializers import BookSerializer
 
-#Class Based GET ALL DATA
+
+# Class Based API for GET ALL DATA
+# Model Based  Serializer
 class GetAllData(APIView):
     def get(self, request):
         query = Book.objects.all()
         serializers = BookModelSerializer(query, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
-#Function Based GET ALL DATA
+
+# Function Based Get All Data
+# Model Based Serializer
 @api_view(['GET'])
-def getalldata(request):
+def get_all_data(request):
     if request.method == 'GET':
         query = Book.objects.all()
         serializers = BookModelSerializer(query, many=True)
-        return Response(serializers.data, status= status.HTTP_200_OK)
+        return Response(serializers.data, status=status.HTTP_200_OK)
 
+# Class Based Get Favorite Date
+# Model Based Serializer
 class GetFavData(APIView):
     def get(self, request):
         query = Book.objects.filter(favorite=True)
@@ -28,9 +35,9 @@ class GetFavData(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
+# Class Based API for Post Data
+# Model Based Serializer
 class PostModelData(APIView):
-    # Model Serializer
-
     def post(self, request):
         serializers = BookModelSerializer(data=request.data)
         if serializers.is_valid():
@@ -38,9 +45,20 @@ class PostModelData(APIView):
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# Function Based API for Post Data
+# Model Based Serializer
+@api_view(['POST'])
+def post_model_data(request):
+    if request.method == 'POST':
+        serializers = BookModelSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# Class Based API for Post Data
+# Custom Serializer
 class PostData(APIView):
-    # Custom Serializer
     def post(self, request):
         serializers = BookSerializer(data=request.data)
         if serializers.is_valid():
