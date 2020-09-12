@@ -1,6 +1,6 @@
 from django.urls import path
 
-from web.views import GetAllData, GetFavData, UpdateStoryData, PostModelData, PostData
+from web.views import GetAllData, GetFavData, UpdateStoryData, PostModelData, PostData, SearchData
 
 urlpatterns = [
     path('get-all-data/', GetAllData.as_view()),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('post-model-data/', PostModelData.as_view()),
     # Custom Serializer path:
     path('post-data/', PostData.as_view()),
+    path('search-data/', SearchData.as_view()),
 ]

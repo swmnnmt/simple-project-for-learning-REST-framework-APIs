@@ -67,3 +67,10 @@ class PostData(APIView):
             book.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SearchData(APIView):
+    def get(self, request):
+        query = Book.objects.filter(story_name__contains=request.GET['name'])
+        serializers = BookModelSerializer(query, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
