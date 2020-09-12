@@ -1,9 +1,12 @@
 from django.urls import path
 
-from web.views import GetAllData, GetFavData, PostModelData, PostData, SearchData, EditData
+from web.views import GetAllData, GetFavData, PostModelData, PostData, SearchData, EditData, getalldata
 
 urlpatterns = [
+    # Class Based GET ALL DATA :
     path('get-all-data/', GetAllData.as_view()),
+    # Function Based GET ALL DATA :
+    path('get-data/', getalldata),
     path('get-favorite-data/', GetFavData.as_view()),
     path('post-model-data/', PostModelData.as_view()),
     # Custom Serializer path:

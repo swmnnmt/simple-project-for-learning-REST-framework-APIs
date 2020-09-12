@@ -1,18 +1,25 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from rest_framework.decorators import api_view
 from web.models import Book
 from web.serializers import BookModelSerializer
 from web.serializers import BookSerializer
 
-
+#Class Based GET ALL DATA
 class GetAllData(APIView):
     def get(self, request):
         query = Book.objects.all()
         serializers = BookModelSerializer(query, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
+#Function Based GET ALL DATA
+@api_view(['GET'])
+def getalldata(request):
+    if request.method == 'GET':
+        query = Book.objects.all()
+        serializers = BookModelSerializer(query, many=True)
+        return Response(serializers.data, status= status.HTTP_200_OK)
 
 class GetFavData(APIView):
     def get(self, request):
