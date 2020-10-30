@@ -6,7 +6,7 @@ simple project for learning REST framework APIs
 To run in development mode; Just use steps below:
 
 1. Install `python3.8`, `pip`, `virtualenv` in your system.
-2. Clone the project `https://github.com/jadijadi/bestoon`.
+2. Clone the project `https://github.com/swmnnmt/simple-project-for-learning-REST-framework-APIs`.
 3. Make development environment ready using commands below;
 
   ```bash
